@@ -19,10 +19,7 @@ public class Layer {
     public Layer() {
         Log.i(Layer.class.getSimpleName(), "Default constructor");
         this.attached = false;
-        initialize();
     }
-
-    protected native void initialize();
 
     @Override
     protected native void finalize() throws Throwable;

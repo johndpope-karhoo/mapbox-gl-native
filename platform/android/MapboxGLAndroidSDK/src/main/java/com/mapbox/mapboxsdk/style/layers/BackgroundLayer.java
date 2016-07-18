@@ -11,7 +11,10 @@ public class BackgroundLayer extends Layer {
         super(nativePtr);
     }
 
-    public BackgroundLayer() {
+    public BackgroundLayer(String layerId) {
         super();
+        initialize(layerId);
     }
+
+    protected native void initialize(String layerId);
 }

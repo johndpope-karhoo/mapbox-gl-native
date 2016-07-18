@@ -3,7 +3,6 @@
 #include "layer.hpp"
 #include <mbgl/style/layers/background_layer.hpp>
 #include <jni/jni.hpp>
-#include <string>
 
 namespace mbgl {
 namespace android {

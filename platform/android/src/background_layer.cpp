@@ -1,5 +1,7 @@
 #include "background_layer.hpp"
 
+#include <string>
+
 //XXX
 #include <mbgl/platform/log.hpp>
 
@@ -7,7 +9,7 @@ namespace mbgl {
 namespace android {
 
     BackgroundLayer::BackgroundLayer(jni::JNIEnv& env, jni::String layerId)
-        : Layer(env, std::make_unique<mbgl::style::BackgroundLayer>("fm")) {
+        : Layer(env, std::make_unique<mbgl::style::BackgroundLayer>(jni::Make<std::string>(env, layerId))) {
 
         mbgl::Log::Debug(mbgl::Event::JNI, "Background Layer constructed, owning reference");
     }
@@ -20,7 +22,7 @@ namespace android {
 
     BackgroundLayer::~BackgroundLayer() = default;
 
-    jni::Class<BackgroundLayer> javaClass;
+    jni::Class<BackgroundLayer> BackgroundLayer::javaClass;
 
     jni::jobject* BackgroundLayer::createJavaPeer(jni::JNIEnv& env) {
         static auto constructor = BackgroundLayer::javaClass.template GetConstructor<jni::jlong>(env);
@@ -36,13 +38,11 @@ namespace android {
         #define METHOD(MethodPtr, name) jni::MakeNativePeerMethod<decltype(MethodPtr), (MethodPtr)>(name)
 
         //Register the peer
-        jni::RegisterNativePeer<BackgroundLayer>(env, BackgroundLayer::javaClass, "nativePtr",
+        jni::RegisterNativePeer<BackgroundLayer>(
+            env, BackgroundLayer::javaClass, "nativePtr",
             std::make_unique<BackgroundLayer, JNIEnv&, jni::String>,
             "initialize",
-            "finalize",
-            METHOD(&BackgroundLayer::getId, "nativeGetId"),
-            METHOD(&BackgroundLayer::setLayoutProperty, "nativeSetLayoutProperty"),
-            METHOD(&BackgroundLayer::setPaintProperty, "nativeSetPaintProperty")
+            "finalize"
         );
 
     }

@@ -16,7 +16,7 @@ namespace mbgl {
 namespace android {
 
     /**
-     * Invoked when the construction is initiated from the jvm
+     * Invoked when the construction is initiated from the jvm through a subclass
      */
     Layer::Layer(jni::JNIEnv& env, std::unique_ptr<mbgl::style::Layer> coreLayer)
         : ownedLayer(std::move(coreLayer))
@@ -68,6 +68,25 @@ namespace android {
 
         //Update the style
         map->update(mbgl::Update::RecalculateStyle | mbgl::Update::Classes);
+    }
+
+    jni::Class<Layer> Layer::javaClass;
+
+    void Layer::registerNative(jni::JNIEnv& env) {
+        mbgl::Log::Debug(mbgl::Event::JNI, "Registering native base layer");
+
+        //Lookup the class
+        Layer::javaClass = *jni::Class<Layer>::Find(env).NewGlobalRef(env).release();
+
+        #define METHOD(MethodPtr, name) jni::MakeNativePeerMethod<decltype(MethodPtr), (MethodPtr)>(name)
+
+        //Register the peer
+        jni::RegisterNativePeer<Layer>(env, Layer::javaClass, "nativePtr",
+            METHOD(&Layer::getId, "nativeGetId"),
+            METHOD(&Layer::setLayoutProperty, "nativeSetLayoutProperty"),
+            METHOD(&Layer::setPaintProperty, "nativeSetPaintProperty")
+        );
+
     }
 }
 }

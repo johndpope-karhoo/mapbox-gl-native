@@ -29,6 +29,7 @@ jni::jobject* createJavaLayerPeer(jni::JNIEnv& env, mbgl::Map& map, mbgl::style:
 }
 
 void registerNativeLayers(jni::JNIEnv& env) {
+    Layer::registerNative(env);
     BackgroundLayer::registerNative(env);
 }
 

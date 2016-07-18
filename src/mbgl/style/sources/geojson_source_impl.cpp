@@ -36,8 +36,8 @@ Result<GeoJSON> convertGeoJSON(const JSValue& value) {
 }
 } // namespace conversion
 
-GeoJSONSource::Impl::Impl(std::string id_, Source& base_)
-    : Source::Impl(SourceType::GeoJSON, std::move(id_), base_) {
+GeoJSONSource::Impl::Impl(std::string id_, Source& base_, const GeoJSONOptions& options_)
+    : Source::Impl(SourceType::GeoJSON, std::move(id_), base_), options(options_) {
 }
 
 GeoJSONSource::Impl::~Impl() = default;

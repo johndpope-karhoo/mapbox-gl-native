@@ -9,12 +9,12 @@ namespace style {
 struct GeoJSONOptions {
     // GeoJSON-VT options
     uint8_t maxzoom = 18;
-    uint16_t buffer = 64;
-    double tolerance = 3.0;
+    uint16_t buffer = 128;
+    double tolerance = 0.375;
 
     // Supercluster options
     bool cluster = false;
-    uint16_t clusterRadius = 400;
+    uint16_t clusterRadius = 50;
     uint8_t clusterMaxZoom = 17;
 };
 

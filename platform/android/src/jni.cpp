@@ -11,7 +11,7 @@
 #include "jni.hpp"
 #include "java_types.hpp"
 #include "native_map_view.hpp"
-#include "layer.hpp"
+#include "layers.hpp"
 
 #include <mbgl/map/map.hpp>
 #include <mbgl/map/camera.hpp>
@@ -1094,23 +1094,18 @@ jni::jobject* nativeGetLayer(JNIEnv *env, jni::jobject* obj, jlong nativeMapView
     assert(env);
     assert(nativeMapViewPtr != 0);
 
-    //Leaked
-    static jni::Class<Layer> javaClass = Layer::javaClass;
-    static auto constructor = javaClass.GetConstructor<jni::jlong>(*env);
-
+    //Get the native map peer
     NativeMapView *nativeMapView = reinterpret_cast<NativeMapView *>(nativeMapViewPtr);
-    mbgl::style::Layer* coreLayer = nativeMapView->getMap().getLayer(std_string_from_jstring(env, layerId));
 
+    //Find the layer
+    mbgl::style::Layer* coreLayer = nativeMapView->getMap().getLayer(std_string_from_jstring(env, layerId));
     if (!coreLayer) {
        mbgl::Log::Debug(mbgl::Event::JNI, "No layer found");
        return jni::Object<Layer>();
     }
 
-   std::unique_ptr<Layer> peerLayer = std::make_unique<Layer>(nativeMapView->getMap(), *coreLayer);
-   jni::Object<Layer> result = javaClass.New(*env, constructor, reinterpret_cast<jni::jlong>(peerLayer.get()));
-   peerLayer.release();
-
-   return result;
+    //Create and return the layer's native peer
+    return createJavaLayerPeer(*env, nativeMapView->getMap(), *coreLayer);
 }
 
 void nativeRemoveLayer(JNIEnv *env, jni::jobject* obj, jlong nativeMapViewPtr, jni::jstring* id) {
@@ -1582,7 +1577,7 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     mbgl::android::RegisterNativeHTTPRequest(env);
 
     java::registerNatives(env);
-    Layer::registerNative(env);
+    registerNativeLayers(env);
 
     latLngClass = &jni::FindClass(env, "com/mapbox/mapboxsdk/geometry/LatLng");
     latLngClass = jni::NewGlobalRef(env, latLngClass).release();

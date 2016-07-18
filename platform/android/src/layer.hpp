@@ -16,11 +16,6 @@ public:
 
     static constexpr auto Name() { return "com/mapbox/mapboxsdk/style/layers/Layer"; };
 
-     /**
-      * Register the native class
-      */
-     static void registerNative(jni::JNIEnv&);
-
     /*
      * Called when a Java object is created on the c++ side
      */
@@ -29,9 +24,11 @@ public:
     /*
      * Called when a Java object was created from the jvm side
      */
-    Layer(JNIEnv& env);
+    Layer(jni::JNIEnv&, std::unique_ptr<mbgl::style::Layer>);
 
     virtual ~Layer();
+
+    virtual jni::jobject* createJavaPeer(jni::JNIEnv&) = 0;
 
     jni::String getId(jni::JNIEnv&);
 
@@ -39,9 +36,7 @@ public:
 
     void setPaintProperty(jni::JNIEnv&, jni::String, jni::Object<> value);
 
-    static jni::Class<Layer> javaClass;
-
-private:
+protected:
     std::unique_ptr<mbgl::style::Layer> ownedLayer;
     mbgl::style::Layer& layer;
     mbgl::Map* map;

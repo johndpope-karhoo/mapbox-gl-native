@@ -10,7 +10,6 @@
 #include <string>
 
 //XXX
-#include <mbgl/style/layers/background_layer.hpp>
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 namespace mbgl {
@@ -19,9 +18,8 @@ namespace android {
     /**
      * Invoked when the construction is initiated from the jvm
      */
-    Layer::Layer(jni::JNIEnv& env)
-        //TODO: differentiate implementation and use actual parameters (layer id)
-        : ownedLayer(std::make_unique<mbgl::style::BackgroundLayer>(*new std::string("layer id")))
+    Layer::Layer(jni::JNIEnv& env, std::unique_ptr<mbgl::style::Layer> coreLayer)
+        : ownedLayer(std::move(coreLayer))
         , layer(*ownedLayer) {
 
         mbgl::Log::Debug(mbgl::Event::JNI, "Layer constructed, owning reference");
@@ -70,26 +68,6 @@ namespace android {
 
         //Update the style
         map->update(mbgl::Update::RecalculateStyle | mbgl::Update::Classes);
-    }
-
-    jni::Class<Layer> Layer::javaClass;
-
-    void Layer::registerNative(jni::JNIEnv& env) {
-        mbgl::Log::Debug(mbgl::Event::JNI, "Registering native layer");
-
-        //Lookup the class
-        Layer::javaClass = *jni::Class<Layer>::Find(env).NewGlobalRef(env).release();
-
-        #define METHOD(MethodPtr, name) jni::MakeNativePeerMethod<decltype(MethodPtr), (MethodPtr)>(name)
-
-        //Register the peer
-        jni::RegisterNativePeer<Layer>(env, Layer::javaClass, "nativePtr",
-            std::make_unique<Layer, JNIEnv&>,
-            "initialize",
-            "finalize",
-            METHOD(&Layer::getId, "nativeGetId"),
-            METHOD(&Layer::setLayoutProperty, "nativeSetLayoutProperty"),
-            METHOD(&Layer::setPaintProperty, "nativeSetPaintProperty"));
     }
 }
 }

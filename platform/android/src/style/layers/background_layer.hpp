@@ -1,3 +1,5 @@
+// This file is generated. Do not edit.
+
 #pragma once
 
 #include "layer.hpp"
@@ -9,13 +11,14 @@ namespace android {
 
 class BackgroundLayer : public Layer {
 public:
+
     static constexpr auto Name() { return "com/mapbox/mapboxsdk/style/layers/BackgroundLayer"; };
 
     static jni::Class<BackgroundLayer> javaClass;
 
     static void registerNative(jni::JNIEnv&);
 
-    BackgroundLayer(jni::JNIEnv&, jni::String); //, jni::String layerID
+    BackgroundLayer(jni::JNIEnv&, jni::String);
 
     BackgroundLayer(mbgl::Map&, mbgl::style::BackgroundLayer&);
 
@@ -24,5 +27,5 @@ public:
     jni::jobject* createJavaPeer(jni::JNIEnv&);
 };
 
-}
-}
+} // namespace android
+} // namespace mbgl

@@ -15,6 +15,8 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
+import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.NoSuchLayerException;
 import com.mapbox.mapboxsdk.testapp.R;
@@ -51,11 +53,6 @@ public class RuntimeStyleActivity extends AppCompatActivity {
 
                 //Center and Zoom (Amsterdam, zoomed to streets)
                 mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.379189, 4.899431), 14));
-
-                //TODO: Add layer
-                Layer custom = new Layer();
-                Log.i(TAG, "Created the layer");
-                custom = null;
             }
         });
     }
@@ -117,6 +114,9 @@ public class RuntimeStyleActivity extends AppCompatActivity {
             case R.id.action_remove_layer:
                 removeBuildings();
                 return true;
+            case R.id.action_add_layer:
+                addLayer();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -172,6 +172,17 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         } catch (NoSuchLayerException e) {
             Toast.makeText(RuntimeStyleActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void addLayer() {
+        //TODO: Add meaningful source
+        Layer layer = new FillLayer("testLayer", "composite" /**Existing source**/);
+        layer.setPaintProperty(fillColor(Color.RED)); //You can set properties here
+        mapboxMap.addLayer(layer, "building");
+        layer.setPaintProperty(fillColor(Color.RED)); //Or after adding on the orig object
+
+        //Or get the object later and set it. It's all good.
+        mapboxMap.getLayer("testLayer").setPaintProperty(fillColor(Color.RED));
     }
 
     private void setupActionBar() {

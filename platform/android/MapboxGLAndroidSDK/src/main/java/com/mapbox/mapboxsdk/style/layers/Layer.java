@@ -8,36 +8,25 @@ import android.util.Log;
 public class Layer {
 
     private long nativePtr;
-    private boolean attached;
 
     public Layer(long nativePtr) {
         Log.i(Layer.class.getSimpleName(), "Native pointer constructor: " + nativePtr);
         this.nativePtr = nativePtr;
-        this.attached = true;
     }
 
     public Layer() {
         Log.i(Layer.class.getSimpleName(), "Default constructor");
-        this.attached = false;
     }
 
     @Override
     protected native void finalize() throws Throwable;
 
     public void setLayoutProperty(Property<?> property) {
-        if (attached) {
-            nativeSetLayoutProperty(property.name, property.value);
-        } else {
-            //TODO Add property to list to support addLayer();
-        }
+        nativeSetLayoutProperty(property.name, property.value);
     }
 
     public void setPaintProperty(Property<?> property) {
-        if (attached) {
-            nativeSetPaintProperty(property.name, property.value);
-        } else {
-            //TODO Add property to list to support addLayer();
-        }
+        nativeSetPaintProperty(property.name, property.value);
     }
 
     public String getId() {
@@ -53,5 +42,9 @@ public class Layer {
     @Override
     public String toString() {
         return "Layer: " + getId();
+    }
+
+    public long getNativePtr() {
+        return nativePtr;
     }
 }

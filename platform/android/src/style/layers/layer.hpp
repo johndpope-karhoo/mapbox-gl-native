@@ -36,6 +36,9 @@ public:
 
     jni::String getId(jni::JNIEnv&);
 
+    //Release the owned view and return it
+    std::unique_ptr<mbgl::style::Layer> releaseCoreLayer();
+
     void setLayoutProperty(jni::JNIEnv&, jni::String, jni::Object<> value);
 
     void setPaintProperty(jni::JNIEnv&, jni::String, jni::Object<> value);

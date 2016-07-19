@@ -37,6 +37,11 @@ namespace android {
         return jni::Make<jni::String>(env, layer.getID());
     }
 
+    std::unique_ptr<mbgl::style::Layer> Layer::releaseCoreLayer() {
+        assert(ownedLayer != nullptr);
+        return std::move(ownedLayer);
+    }
+
     void Layer::setLayoutProperty(jni::JNIEnv& env, jni::String jname, jni::Object<> jvalue) {
         mbgl::Log::Debug(mbgl::Event::JNI, "Set layout property");
 
@@ -49,8 +54,10 @@ namespace android {
             return;
         }
 
-        //Update the style
-        map->update(mbgl::Update::RecalculateStyle);
+        //Update the style if attached
+        if (ownedLayer == nullptr) {
+            map->update(mbgl::Update::RecalculateStyle);
+        }
     }
 
     void Layer::setPaintProperty(jni::JNIEnv& env, jni::String jname, jni::Object<> jvalue) {
@@ -66,8 +73,10 @@ namespace android {
             return;
         }
 
-        //Update the style
-        map->update(mbgl::Update::RecalculateStyle | mbgl::Update::Classes);
+        //Update the style if attached
+        if (ownedLayer == nullptr) {
+            map->update(mbgl::Update::RecalculateStyle | mbgl::Update::Classes);
+        }
     }
 
     jni::Class<Layer> Layer::javaClass;

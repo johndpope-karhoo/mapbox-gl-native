@@ -114,6 +114,16 @@ public class MapboxMap {
     }
 
     @UiThread
+    public void addLayer(@NonNull Layer layer) {
+        addLayer(layer, null);
+    }
+
+    @UiThread
+    public void addLayer(@NonNull Layer layer, String before) {
+        getMapView().getNativeMapView().addLayer(layer, before);
+    }
+
+    @UiThread
     public void removeLayer(@NonNull String layerId) throws NoSuchLayerException {
         getMapView().getNativeMapView().removeLayer(layerId);
     }

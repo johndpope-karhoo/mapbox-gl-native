@@ -4,7 +4,7 @@
 #include <mbgl/map/map.hpp>
 #include <mbgl/style/layer.hpp>
 
-#include "value.hpp"
+#include "../value.hpp"
 
 #include <jni/jni.hpp>
 

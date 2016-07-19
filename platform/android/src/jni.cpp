@@ -11,7 +11,7 @@
 #include "jni.hpp"
 #include "java_types.hpp"
 #include "native_map_view.hpp"
-#include "layers.hpp"
+#include "style/layers/layers.hpp"
 
 #include <mbgl/map/map.hpp>
 #include <mbgl/map/camera.hpp>

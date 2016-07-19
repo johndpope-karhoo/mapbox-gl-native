@@ -1,6 +1,6 @@
 #include "value.hpp"
 
-#include "java_types.hpp"
+#include "../java_types.hpp"
 #include <mbgl/platform/log.hpp>
 
 //XXX

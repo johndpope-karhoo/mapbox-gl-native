@@ -1,3 +1,5 @@
+// This file is generated. Edit scripts/generate-style-code.js, then run `make style-code`.
+
 #include "background_layer.hpp"
 
 #include <string>
@@ -10,14 +12,13 @@ namespace android {
 
     BackgroundLayer::BackgroundLayer(jni::JNIEnv& env, jni::String layerId)
         : Layer(env, std::make_unique<mbgl::style::BackgroundLayer>(jni::Make<std::string>(env, layerId))) {
-
-        mbgl::Log::Debug(mbgl::Event::JNI, "Background Layer constructed, owning reference");
+        mbgl::Log::Debug(mbgl::Event::JNI, "BackgroundLayer constructed, owning reference");
     }
 
     BackgroundLayer::BackgroundLayer(mbgl::Map& map, mbgl::style::BackgroundLayer& coreLayer)
         : Layer(map, coreLayer) {
 
-        mbgl::Log::Debug(mbgl::Event::JNI, "Non-owning reference constructor");
+        mbgl::Log::Debug(mbgl::Event::JNI, "BackgroundLayer Non-owning reference constructor");
     }
 
     BackgroundLayer::~BackgroundLayer() = default;
@@ -46,5 +47,6 @@ namespace android {
         );
 
     }
-}
-}
+
+} // namespace android
+} // namespace mbgl

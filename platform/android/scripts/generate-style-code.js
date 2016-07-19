@@ -86,11 +86,11 @@ const layers = spec.layer.type.values.map((type) => {
 });
 
 const layerHpp = ejs.compile(fs.readFileSync('platform/android/scripts/layer.hpp.ejs', 'utf8'), {strict: true});
-//const layerCpp = ejs.compile(fs.readFileSync('platform/android/scripts/layer.cpp.ejs', 'utf8'), {strict: true});
+const layerCpp = ejs.compile(fs.readFileSync('platform/android/scripts/layer.cpp.ejs', 'utf8'), {strict: true});
 
 for (const layer of layers) {
   fs.writeFileSync(`platform/android/src/style/layers/${layer.type}_layer.hpp`, layerHpp(layer));
-  //fs.writeFileSync(`platform/android/src/style/layers/${layer.type}_layer.cpp`, layerCpp(layer));
+  fs.writeFileSync(`platform/android/src/style/layers/${layer.type}_layer.cpp`, layerCpp(layer));
 }
 
 

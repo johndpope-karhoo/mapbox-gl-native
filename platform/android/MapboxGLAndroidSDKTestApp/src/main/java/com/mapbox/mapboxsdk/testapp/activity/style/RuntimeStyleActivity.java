@@ -179,7 +179,7 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         Layer layer = new FillLayer("testLayer", "composite" /**Existing source**/);
         layer.setPaintProperty(fillColor(Color.RED)); //You can set properties here
         mapboxMap.addLayer(layer, "building");
-        layer.setPaintProperty(fillColor(Color.RED)); //Or after adding on the orig object
+        //layer.setPaintProperty(fillColor(Color.RED)); //But not after the object is attached
 
         //Or get the object later and set it. It's all good.
         mapboxMap.getLayer("testLayer").setPaintProperty(fillColor(Color.RED));

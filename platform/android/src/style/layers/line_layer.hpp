@@ -1,4 +1,4 @@
-// This file is generated. Do not edit.
+// This file is generated. Edit android/platform/scripts/generate-style-code.js, then run `make android-style-code`.
 
 #pragma once
 

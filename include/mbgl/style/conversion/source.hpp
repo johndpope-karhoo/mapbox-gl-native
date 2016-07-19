@@ -129,6 +129,33 @@ private:
             }
         }
 
+        const auto clusterValue = objectMember(value, "cluster");
+        if (clusterValue) {
+            if (toBool(*clusterValue)) {
+                options.cluster = *toBool(*clusterValue);
+            } else {
+                return Error { "GeoJSON source cluster value must be a boolean" };
+            }
+        }
+
+        const auto clusterMaxZoomValue = objectMember(value, "clusterMaxZoom");
+        if (clusterMaxZoomValue) {
+            if (toNumber(*clusterMaxZoomValue)) {
+                options.clusterMaxZoom = static_cast<uint8_t>(*toNumber(*clusterMaxZoomValue));
+            } else {
+                return Error { "GeoJSON source clusterMaxZoom value must be a number" };
+            }
+        }
+
+        const auto clusterRadiusValue = objectMember(value, "clusterRadius");
+        if (clusterRadiusValue) {
+            if (toNumber(*clusterRadiusValue)) {
+                options.clusterRadius = static_cast<double>(*toNumber(*clusterRadiusValue));
+            } else {
+                return Error { "GeoJSON source clusterRadius value must be a number" };
+            }
+        }
+
         auto result = std::make_unique<GeoJSONSource>(id, options);
 
         if (isObject(*dataValue)) {

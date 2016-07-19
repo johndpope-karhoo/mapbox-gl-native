@@ -14,8 +14,8 @@ import android.support.annotation.ColorInt;
  */
 public class PropertyFactory {
 
-    public static Property<Boolean> visibility(Boolean visible) {
-        return new Property<>("visibility", visible);
+    public static Property<String> visibility(Boolean visible) {
+        return new Property<>("visibility", visible? "visible": "none");
     }
 
 <% for (const property of properties) { -%>

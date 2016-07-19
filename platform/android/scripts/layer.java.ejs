@@ -1,0 +1,30 @@
+<%
+  const type = locals.type;
+-%>
+// This file is generated. Edit android/platform/scripts/generate-style-code.js, then run `make android-style-code`.
+package com.mapbox.mapboxsdk.style.layers;
+
+/**
+ * <%- camelize(type) %> Layer
+ */
+public class <%- camelize(type) %>Layer extends Layer {
+
+    public <%- camelize(type) %>Layer(long nativePtr) {
+        super(nativePtr);
+    }
+
+<% if (type === 'background') { -%>
+    public <%- camelize(type) %>Layer(String layerId) {
+        initialize(layerId);
+    }
+
+    protected native void initialize(String layerId);
+<% } else { -%>
+    public <%- camelize(type) %>Layer(String layerId, String sourceId) {
+        initialize(layerId, sourceId);
+    }
+
+    protected native void initialize(String layerId, String sourceId);
+<% } -%>
+
+}

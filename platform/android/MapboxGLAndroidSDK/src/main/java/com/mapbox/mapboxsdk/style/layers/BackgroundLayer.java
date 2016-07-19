@@ -1,9 +1,8 @@
+// This file is generated. Edit android/platform/scripts/generate-style-code.js, then run `make android-style-code`.
 package com.mapbox.mapboxsdk.style.layers;
 
-import android.util.Log;
-
 /**
- * Base class for the different Layer types
+ * Background Layer
  */
 public class BackgroundLayer extends Layer {
 
@@ -12,9 +11,9 @@ public class BackgroundLayer extends Layer {
     }
 
     public BackgroundLayer(String layerId) {
-        super();
         initialize(layerId);
     }
 
     protected native void initialize(String layerId);
+
 }

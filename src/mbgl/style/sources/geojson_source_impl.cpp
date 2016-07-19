@@ -15,8 +15,6 @@
 
 #include <sstream>
 
-using namespace mapbox::geojsonvt;
-
 namespace mbgl {
 namespace style {
 namespace conversion {
@@ -25,7 +23,7 @@ template <>
 Result<GeoJSON> convertGeoJSON(const JSValue& value, const GeoJSONOptions& options) {
     double scale = util::EXTENT / util::tileSize;
 
-    Options vtOptions;
+    mapbox::geojsonvt::Options vtOptions;
     vtOptions.maxZoom = options.maxzoom;
     vtOptions.extent = util::EXTENT;
     vtOptions.buffer = std::round(scale * options.buffer);
@@ -33,7 +31,7 @@ Result<GeoJSON> convertGeoJSON(const JSValue& value, const GeoJSONOptions& optio
 
     try {
         const auto geojson = mapbox::geojson::convert(value);
-        return GeoJSON { std::make_unique<GeoJSONVT>(geojson, vtOptions) };
+        return GeoJSON { std::make_unique<mapbox::geojsonvt::GeoJSONVT>(geojson, vtOptions) };
     } catch (const std::exception& ex) {
         return Error { ex.what() };
     }
@@ -91,7 +89,7 @@ void GeoJSONSource::Impl::load(FileSource& fileSource) {
                 // Create an empty GeoJSON VT object to make sure we're not infinitely waiting for
                 // tiles to load.
                 mapbox::geojson::feature_collection features;
-                urlOrGeoJSON = GeoJSON { std::make_unique<GeoJSONVT>(features) };
+                urlOrGeoJSON = GeoJSON { std::make_unique<mapbox::geojsonvt::GeoJSONVT>(features) };
             } else {
                 urlOrGeoJSON = std::move(*geoJSON);
             }

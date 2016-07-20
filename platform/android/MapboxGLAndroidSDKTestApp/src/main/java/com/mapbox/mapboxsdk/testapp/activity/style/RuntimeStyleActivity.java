@@ -2,6 +2,7 @@ package com.mapbox.mapboxsdk.testapp.activity.style;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +20,18 @@ import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.NoSuchLayerException;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.testapp.R;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import static com.mapbox.mapboxsdk.style.layers.Property.*;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
@@ -175,7 +187,17 @@ public class RuntimeStyleActivity extends AppCompatActivity {
     }
 
     private void addLayer() {
-        //TODO: Add meaningful source
+        //Add a source
+        Source source;
+        try {
+            source = new GeoJsonSource("amsterdam-spots", readRawResource(R.raw.amsterdam));
+        } catch (IOException e) {
+            Toast.makeText(RuntimeStyleActivity.this, "Couldn't add source: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mapboxMap.addSource(source);
+
         Layer layer = new FillLayer("testLayer", "composite" /**Existing source**/);
         layer.setPaintProperty(fillColor(Color.RED)); //You can set properties here
         mapboxMap.addLayer(layer, "building");
@@ -183,6 +205,23 @@ public class RuntimeStyleActivity extends AppCompatActivity {
 
         //Or get the object later and set it. It's all good.
         mapboxMap.getLayer("testLayer").setPaintProperty(fillColor(Color.RED));
+    }
+
+    private String readRawResource(@RawRes int rawResource) throws IOException {
+        InputStream is = getResources().openRawResource(rawResource);
+        Writer writer = new StringWriter();
+        char[] buffer = new char[1024];
+        try {
+            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            int n;
+            while ((n = reader.read(buffer)) != -1) {
+                writer.write(buffer, 0, n);
+            }
+        } finally {
+            is.close();
+        }
+
+        return writer.toString();
     }
 
     private void setupActionBar() {

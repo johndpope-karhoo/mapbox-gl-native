@@ -5,7 +5,7 @@ import android.util.Log;
 /**
  * Base class for the different Layer types
  */
-public class Layer {
+public abstract class Layer {
 
     private long nativePtr;
 

@@ -12,6 +12,7 @@
 #include "java_types.hpp"
 #include "native_map_view.hpp"
 #include "style/layers/layers.hpp"
+#include "style/sources/sources.hpp"
 
 #include <mbgl/map/map.hpp>
 #include <mbgl/map/camera.hpp>
@@ -1133,6 +1134,36 @@ void nativeRemoveLayer(JNIEnv *env, jni::jobject* obj, jlong nativeMapViewPtr, j
     }
 }
 
+void nativeAddSource(JNIEnv *env, jni::jobject* obj, jlong nativeMapViewPtr, jni::jstring* id, jni::jobject* jsource) {
+    mbgl::Log::Debug(mbgl::Event::JNI, "nativeAddSource");
+    assert(nativeMapViewPtr != 0);
+    assert(id != nullptr);
+    assert(jsource != nullptr);
+
+    //Convert
+    mbgl::optional<std::unique_ptr<mbgl::style::Source>> source = convertToNativeSource(
+        *env,
+        jni::Object<jni::jobject>(jsource), jni::String(id)
+    );
+
+    //Add to map view
+    if (source) {
+        NativeMapView *nativeMapView = reinterpret_cast<NativeMapView *>(nativeMapViewPtr);
+        nativeMapView->getMap().addSource(std::move(*source));
+    }
+}
+
+void nativeRemoveSource(JNIEnv *env, jni::jobject* obj, jlong nativeMapViewPtr, jni::jstring* id) {
+    mbgl::Log::Debug(mbgl::Event::JNI, "nativeRemoveSource");
+    assert(nativeMapViewPtr != 0);
+    NativeMapView *nativeMapView = reinterpret_cast<NativeMapView *>(nativeMapViewPtr);
+    try {
+        nativeMapView->getMap().removeSource(std_string_from_jstring(env, id));
+    } catch (const std::runtime_error& error) {
+        jni::ThrowNew(*env, jni::FindClass(*env, "com/mapbox/mapboxsdk/style/layers/NoSuchSourceException"), error.what());
+    }
+}
+
 // Offline calls begin
 
 jlong createDefaultFileSource(JNIEnv *env, jni::jobject* obj, jni::jstring* cachePath_, jni::jstring* assetRoot_, jlong maximumCacheSize) {
@@ -1750,6 +1781,8 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         MAKE_NATIVE_METHOD(nativeGetLayer, "(JLjava/lang/String;)Lcom/mapbox/mapboxsdk/style/layers/Layer;"),
         MAKE_NATIVE_METHOD(nativeAddLayer, "(JJLjava/lang/String;)V"),
         MAKE_NATIVE_METHOD(nativeRemoveLayer, "(JLjava/lang/String;)V"),
+        MAKE_NATIVE_METHOD(nativeAddSource, "(JLjava/lang/String;Lcom/mapbox/mapboxsdk/style/sources/Source;)V"),
+        MAKE_NATIVE_METHOD(nativeRemoveSource, "(JLjava/lang/String;)V"),
         MAKE_NATIVE_METHOD(nativeSetContentPadding, "(JDDDD)V")
     );
 

@@ -20,6 +20,7 @@ import com.mapbox.mapboxsdk.layers.CustomLayer;
 import com.mapbox.mapboxsdk.offline.OfflineManager;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.NoSuchLayerException;
+import com.mapbox.mapboxsdk.style.sources.Source;
 
 import java.util.List;
 
@@ -484,8 +485,16 @@ final class NativeMapView {
         nativeAddLayer(mNativeMapViewPtr, layer.getNativePtr(), before);
     }
 
-    public void removeLayer(String layerId) throws NoSuchLayerException {
+    public void removeLayer(@NonNull String layerId) throws NoSuchLayerException {
         nativeRemoveLayer(mNativeMapViewPtr, layerId);
+    }
+
+    public void addSource(@NonNull Source source) {
+        nativeAddSource(mNativeMapViewPtr, source.getId(), source);
+    }
+
+    public void removeSource(@NonNull String sourceId) {
+        nativeRemoveSource(mNativeMapViewPtr, sourceId);
     }
 
     //
@@ -669,4 +678,8 @@ final class NativeMapView {
     private native void nativeAddLayer(long nativeMapViewPtr, long layerPtr, String before);
 
     private native void nativeRemoveLayer(long nativeMapViewPtr, String layerId) throws NoSuchLayerException;
+
+    private native void nativeAddSource(long mNativeMapViewPtr, String id, Source source);
+
+    private native void nativeRemoveSource(long mNativeMapViewPtr, String sourceId);
 }

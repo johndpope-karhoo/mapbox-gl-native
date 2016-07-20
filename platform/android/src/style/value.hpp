@@ -23,6 +23,7 @@ public:
     std::string toString() const;
     float toNumber() const;
     bool toBool() const;
+    Value get(const char* key) const;
 
     jni::JNIEnv& jenv;
     jni::jobject* value;

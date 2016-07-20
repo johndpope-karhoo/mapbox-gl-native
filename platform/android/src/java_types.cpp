@@ -15,6 +15,7 @@ namespace java {
     jni::jmethodID* Number::floatValueMethodId;
 
     jni::jclass* Map::jclass;
+    jni::jmethodID* Map::getMethodId;
 
     void registerNatives(JNIEnv& env) {
         ObjectArray::jclass = jni::NewGlobalRef(env, &jni::FindClass(env, "[Ljava/lang/Object;")).release();
@@ -28,6 +29,7 @@ namespace java {
         Number::floatValueMethodId = &jni::GetMethodID(env, *Number::jclass, "floatValue", "()F");
 
         Map::jclass = jni::NewGlobalRef(env, &jni::FindClass(env, "java/util/Map")).release();
+        Map::getMethodId = &jni::GetMethodID(env, *Map::jclass, "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
     }
 
 }

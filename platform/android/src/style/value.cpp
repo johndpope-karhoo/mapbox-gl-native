@@ -65,6 +65,12 @@ namespace android {
         mbgl::Log::Debug(mbgl::Event::JNI, "Value.toBool()");
         return jni::CallMethod<jni::jboolean>(jenv, value, *java::Boolean::booleanValueMethodId);
     }
+
+    Value Value::get(const char* key) const {
+        mbgl::Log::Debug(mbgl::Event::JNI, "Value.get(key)");
+        jni::jobject* member = jni::CallMethod<jni::jobject*>(jenv, value, *java::Map::getMethodId, jni::Make<jni::String>(jenv, std::string(key)).Get());
+        return Value(jenv, member);
+    }
 }
 }
 

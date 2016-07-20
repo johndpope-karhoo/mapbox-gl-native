@@ -47,8 +47,13 @@ inline mbgl::android::Value arrayMember(const mbgl::android::Value& value, std::
 
 inline optional<mbgl::android::Value> objectMember(const mbgl::android::Value& value, const char* key) {
     mbgl::Log::Debug(mbgl::Event::Android, "objectMember");
-    //TODO
-    return {};
+    mbgl::android::Value member = value.get(key);
+
+    if (!member.isNull()) {
+        return member;
+    } else {
+        return {};
+    }
 }
 
 template <class Fn>

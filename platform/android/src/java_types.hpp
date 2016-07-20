@@ -26,6 +26,7 @@ namespace java {
 
     struct Map {
         static jni::jclass* jclass;
+        static jni::jmethodID* getMethodId;
     };
 
     void registerNatives(JNIEnv&);

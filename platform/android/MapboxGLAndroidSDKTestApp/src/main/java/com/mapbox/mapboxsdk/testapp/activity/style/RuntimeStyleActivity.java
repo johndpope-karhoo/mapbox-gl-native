@@ -198,13 +198,13 @@ public class RuntimeStyleActivity extends AppCompatActivity {
 
         mapboxMap.addSource(source);
 
-        Layer layer = new FillLayer("testLayer", "composite" /**Existing source**/);
-        layer.setPaintProperty(fillColor(Color.RED)); //You can set properties here
+        Layer layer = new FillLayer("testLayer", "amsterdam-spots");
+        layer.setPaintProperty(fillColor(Color.GREEN)); //You can set properties here
         mapboxMap.addLayer(layer, "building");
         //layer.setPaintProperty(fillColor(Color.RED)); //But not after the object is attached
 
         //Or get the object later and set it. It's all good.
-        mapboxMap.getLayer("testLayer").setPaintProperty(fillColor(Color.RED));
+        mapboxMap.getLayer("testLayer").setPaintProperty(fillColor(Color.GREEN));
     }
 
     private String readRawResource(@RawRes int rawResource) throws IOException {

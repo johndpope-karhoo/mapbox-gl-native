@@ -19,7 +19,7 @@ namespace android {
         Value value(env, jvalue);
         conversion::Result<std::unique_ptr<Source>> source = conversion::convert<std::unique_ptr<Source>>(value, jni::Make<std::string>(env, id));
         if (!source) {
-            mbgl::Log::Debug(mbgl::Event::JNI, "Unable to add source: " + source.error().message);
+            mbgl::Log::Error(mbgl::Event::JNI, "Unable to add source: " + source.error().message);
             return {};
         }
         return std::move(*source);

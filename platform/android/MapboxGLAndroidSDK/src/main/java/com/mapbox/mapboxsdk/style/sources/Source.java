@@ -1,18 +1,13 @@
 package com.mapbox.mapboxsdk.style.sources;
 
-import android.support.annotation.Keep;
+import java.util.HashMap;
 
-public abstract class Source {
+public abstract class Source extends HashMap<String, Object> {
     private final String id;
-    @Keep
-    private final String type;
-    @Keep
-    private final Object value;
 
-    protected Source(String id, String type, Object value) {
+    protected Source(String id, String type) {
+        this.put("type", type);
         this.id = id;
-        this.type = type;
-        this.value = value;
     }
 
     public String getId() {

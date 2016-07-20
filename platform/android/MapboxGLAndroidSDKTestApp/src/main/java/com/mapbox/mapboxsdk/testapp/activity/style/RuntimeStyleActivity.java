@@ -199,12 +199,19 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         mapboxMap.addSource(source);
 
         Layer layer = new FillLayer("testLayer", "amsterdam-spots");
-        layer.setPaintProperty(fillColor(Color.GREEN)); //You can set properties here
+        layer.setPaintProperty(fillColor(Color.RED)); //You can set properties here
+        layer.setPaintProperty(fillOutlineColor(Color.BLUE));
+        layer.setPaintProperty(fillOpacity(0.3f));
+        layer.setPaintProperty(fillAntialias(true));
+        //?layer.setPaintProperty(fillPattern());
         mapboxMap.addLayer(layer, "building");
-        //layer.setPaintProperty(fillColor(Color.RED)); //But not after the object is attached
+        //layer.setPaintProperty(fillColor(Color.RED)); //XXX But not after the object is attached
 
         //Or get the object later and set it. It's all good.
-        mapboxMap.getLayer("testLayer").setPaintProperty(fillColor(Color.GREEN));
+        mapboxMap.getLayer("testLayer").setPaintProperty(fillColor(Color.RED));
+
+        //Get a good look at it all
+        mapboxMap.animateCamera(CameraUpdateFactory.zoomTo(12));
     }
 
     private String readRawResource(@RawRes int rawResource) throws IOException {

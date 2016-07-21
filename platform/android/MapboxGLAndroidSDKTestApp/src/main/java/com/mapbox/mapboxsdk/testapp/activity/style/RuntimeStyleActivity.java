@@ -200,7 +200,7 @@ public class RuntimeStyleActivity extends AppCompatActivity {
 
         mapboxMap.addSource(source);
 
-        Layer layer = new FillLayer("testLayer", "amsterdam-spots");
+        FillLayer layer = new FillLayer("testLayer", "amsterdam-spots");
         layer.setPaintProperty(fillColor(Color.RED)); //You can set properties here
         layer.setPaintProperty(fillOutlineColor(Color.BLUE));
         layer.setPaintProperty(fillOpacity(0.3f));

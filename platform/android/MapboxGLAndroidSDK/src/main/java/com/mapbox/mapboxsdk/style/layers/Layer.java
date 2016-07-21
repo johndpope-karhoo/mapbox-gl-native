@@ -2,6 +2,8 @@ package com.mapbox.mapboxsdk.style.layers;
 
 import android.util.Log;
 
+import com.mapbox.mapboxsdk.style.Filter;
+
 /**
  * Base class for the different Layer types
  */
@@ -39,6 +41,8 @@ public abstract class Layer {
 
     protected native void nativeSetPaintProperty(String name, Object value);
 
+    protected native void nativeSetFilter(Object[] filter);
+
     @Override
     public String toString() {
         return "Layer: " + getId();
@@ -47,4 +51,5 @@ public abstract class Layer {
     public long getNativePtr() {
         return nativePtr;
     }
+
 }

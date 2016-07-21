@@ -16,6 +16,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.style.Filter;
 import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
@@ -33,6 +34,7 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import static com.mapbox.mapboxsdk.style.Filter.*;
 import static com.mapbox.mapboxsdk.style.layers.Property.*;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
 
@@ -204,6 +206,10 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         layer.setPaintProperty(fillOpacity(0.3f));
         layer.setPaintProperty(fillAntialias(true));
         //?layer.setPaintProperty(fillPattern());
+
+        layer.setFilter(all());
+
+
         mapboxMap.addLayer(layer, "building");
         //layer.setPaintProperty(fillColor(Color.RED)); //XXX But not after the object is attached
 

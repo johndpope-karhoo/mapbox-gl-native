@@ -4,10 +4,15 @@
 // This file is generated. Edit android/platform/scripts/generate-style-code.js, then run `make android-style-code`.
 package com.mapbox.mapboxsdk.style.layers;
 
+<% if (type !== 'background') { -%>
+import com.mapbox.mapboxsdk.style.Filter;
+import com.mapbox.mapboxsdk.style.Filterable;
+
+<% } -%>
 /**
  * <%- camelize(type) %> Layer
  */
-public class <%- camelize(type) %>Layer extends Layer {
+public class <%- camelize(type) %>Layer extends Layer <% if(type !== "background") { -%>implements Filterable <% } -%>{
 
     public <%- camelize(type) %>Layer(long nativePtr) {
         super(nativePtr);
@@ -25,6 +30,16 @@ public class <%- camelize(type) %>Layer extends Layer {
     }
 
     protected native void initialize(String layerId, String sourceId);
+
+    @Override
+    public void setFilter(Filter.Statement filter) {
+        this.setFilter(filter.toArray());
+    }
+
+    @Override
+    public void setFilter(Object[] filter) {
+        nativeSetFilter(filter);
+    }
 <% } -%>
 
 }

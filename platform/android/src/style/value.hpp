@@ -24,6 +24,8 @@ public:
     float toNumber() const;
     bool toBool() const;
     Value get(const char* key) const;
+    int getLength() const;
+    Value get(const int index ) const;
 
     jni::JNIEnv& jenv;
     jni::jobject* value;

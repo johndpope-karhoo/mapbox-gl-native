@@ -18,35 +18,26 @@ namespace conversion {
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 inline bool isUndefined(const mbgl::android::Value& value) {
-    mbgl::Log::Debug(mbgl::Event::Android, "isUndefined");
     return value.isNull();
 }
 
 inline bool isArray(const mbgl::android::Value& value) {
-    mbgl::Log::Debug(mbgl::Event::Android, "isArray");
     return value.isArray();
 }
 
 inline bool isObject(const mbgl::android::Value& value) {
-    mbgl::Log::Debug(mbgl::Event::Android, "isObject");
     return value.isObject();
 }
 
 inline std::size_t arrayLength(const mbgl::android::Value& value) {
-    mbgl::Log::Debug(mbgl::Event::Android, "arrayLength");
-    //TODO
-    return 0;
+    return value.getLength();;
 }
 
 inline mbgl::android::Value arrayMember(const mbgl::android::Value& value, std::size_t i) {
-    mbgl::Log::Debug(mbgl::Event::Android, "arrayMember");
-    //TODO
-    mbgl::android::Value newVal(value.jenv, nullptr);
-    return newVal;
+    return value.get(i);
 }
 
 inline optional<mbgl::android::Value> objectMember(const mbgl::android::Value& value, const char* key) {
-    mbgl::Log::Debug(mbgl::Event::Android, "objectMember");
     mbgl::android::Value member = value.get(key);
 
     if (!member.isNull()) {
@@ -58,13 +49,12 @@ inline optional<mbgl::android::Value> objectMember(const mbgl::android::Value& v
 
 template <class Fn>
 optional<Error> eachMember(const mbgl::android::Value& value, Fn&& fn) {
-    mbgl::Log::Debug(mbgl::Event::Android, "eachMember");
     //TODO
+    mbgl::Log::Warning(mbgl::Event::Android, "eachMember not implemented");
     return {};
 }
 
 inline optional<bool> toBool(const mbgl::android::Value& value) {
-    mbgl::Log::Debug(mbgl::Event::Android, "toBool");
     if (value.isBool()) {
         return value.toBool();
     } else {
@@ -73,7 +63,6 @@ inline optional<bool> toBool(const mbgl::android::Value& value) {
 }
 
 inline optional<float> toNumber(const mbgl::android::Value& value) {
-    mbgl::Log::Debug(mbgl::Event::Android, "toNumber");
     if (value.isNumber()) {
         return value.toNumber();
     } else {
@@ -82,7 +71,6 @@ inline optional<float> toNumber(const mbgl::android::Value& value) {
 }
 
 inline optional<std::string> toString(const mbgl::android::Value& value) {
-    mbgl::Log::Debug(mbgl::Event::Android, "toString");
     if (value.isString()) {
         return value.toString();
     } else {
@@ -91,7 +79,6 @@ inline optional<std::string> toString(const mbgl::android::Value& value) {
 }
 
 inline optional<Value> toValue(const mbgl::android::Value& value) {
-    mbgl::Log::Debug(mbgl::Event::Android, "toValue");
     if (value.isBool()) {
         return { value.toBool() };
     } else if (value.isString()) {

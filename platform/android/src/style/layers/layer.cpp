@@ -6,6 +6,7 @@
 #include <mbgl/platform/log.hpp>
 #include <mbgl/style/conversion.hpp>
 #include <mbgl/style/conversion/layer.hpp>
+#include <mbgl/style/conversion/source.hpp>
 
 #include <string>
 
@@ -79,6 +80,34 @@ namespace android {
         }
     }
 
+    void Layer::setFilter(jni::JNIEnv& env, jni::Array<jni::Object<>> jfilter) {
+        using namespace mbgl::style;
+        using namespace mbgl::style::conversion;
+        mbgl::Log::Debug(mbgl::Event::JNI, "Set filter");
+
+        Value wrapped(env, jfilter);
+        Filter filter;
+
+        Result<Filter> converted = convert<Filter>(wrapped);
+        if (!converted) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error setting filter: " + converted.error().message);
+            return;
+        }
+        filter = std::move(*converted);
+
+        if (layer.is<FillLayer>()) {
+            layer.as<FillLayer>()->setFilter(filter);
+        } else if (layer.is<LineLayer>()) {
+            layer.as<LineLayer>()->setFilter(filter);
+        } else if (layer.is<SymbolLayer>()) {
+            layer.as<SymbolLayer>()->setFilter(filter);
+        } else if (layer.is<CircleLayer>()) {
+            layer.as<CircleLayer>()->setFilter(filter);
+        } else {
+            mbgl::Log::Warning(mbgl::Event::JNI, "Layer doesn't support filters");
+        }
+    }
+
     jni::Class<Layer> Layer::javaClass;
 
     void Layer::registerNative(jni::JNIEnv& env) {
@@ -93,7 +122,8 @@ namespace android {
         jni::RegisterNativePeer<Layer>(env, Layer::javaClass, "nativePtr",
             METHOD(&Layer::getId, "nativeGetId"),
             METHOD(&Layer::setLayoutProperty, "nativeSetLayoutProperty"),
-            METHOD(&Layer::setPaintProperty, "nativeSetPaintProperty")
+            METHOD(&Layer::setPaintProperty, "nativeSetPaintProperty"),
+            METHOD(&Layer::setFilter, "nativeSetFilter")
         );
 
     }

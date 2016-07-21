@@ -207,8 +207,8 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         layer.setPaintProperty(fillAntialias(true));
         //?layer.setPaintProperty(fillPattern());
 
-        layer.setFilter(all());
-
+        //Only show me parks
+        layer.setFilter(eq("type", "park"));
 
         mapboxMap.addLayer(layer, "building");
         //layer.setPaintProperty(fillColor(Color.RED)); //XXX But not after the object is attached

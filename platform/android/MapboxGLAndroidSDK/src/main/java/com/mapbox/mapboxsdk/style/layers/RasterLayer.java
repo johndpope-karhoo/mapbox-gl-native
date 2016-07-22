@@ -16,4 +16,8 @@ public class RasterLayer extends Layer {
 
     protected native void initialize(String layerId, String sourceId);
 
+    public void setSourceLayer(String sourceLayer) {
+        nativeSetSourceLayer(sourceLayer);
+    }
+
 }

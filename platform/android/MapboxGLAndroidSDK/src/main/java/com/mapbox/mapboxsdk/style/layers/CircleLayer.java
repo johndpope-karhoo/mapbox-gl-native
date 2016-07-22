@@ -19,6 +19,10 @@ public class CircleLayer extends Layer implements Filterable {
 
     protected native void initialize(String layerId, String sourceId);
 
+    public void setSourceLayer(String sourceLayer) {
+        nativeSetSourceLayer(sourceLayer);
+    }
+
     @Override
     public void setFilter(Filter.Statement filter) {
         this.setFilter(filter.toArray());

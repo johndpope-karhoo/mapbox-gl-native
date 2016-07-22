@@ -30,6 +30,10 @@ public class <%- camelize(type) %>Layer extends Layer <% if(type !== "background
     }
 
     protected native void initialize(String layerId, String sourceId);
+
+    public void setSourceLayer(String sourceLayer) {
+        nativeSetSourceLayer(sourceLayer);
+    }
 <% } -%>
 
 <% if (type !== 'background' && type !== 'raster') { -%>

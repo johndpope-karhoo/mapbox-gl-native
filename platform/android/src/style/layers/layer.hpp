@@ -43,7 +43,11 @@ public:
 
     void setPaintProperty(jni::JNIEnv&, jni::String, jni::Object<> value);
 
+    /* common properties, but not shared by all */
+
     void setFilter(jni::JNIEnv& env, jni::Array<jni::Object<>> jfilter);
+
+    void setSourceLayer(jni::JNIEnv& env, jni::String sourceLayer);
 
 protected:
     std::unique_ptr<mbgl::style::Layer> ownedLayer;

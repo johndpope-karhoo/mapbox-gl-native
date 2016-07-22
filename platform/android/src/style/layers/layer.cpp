@@ -108,6 +108,25 @@ namespace android {
         }
     }
 
+    void Layer::setSourceLayer(jni::JNIEnv& env, jni::String sourceLayer) {
+        using namespace mbgl::style;
+
+        std::string layerId = jni::Make<std::string>(env, sourceLayer);
+        mbgl::Log::Debug(mbgl::Event::JNI, "Set source layer: " + layerId);
+
+        if (layer.is<FillLayer>()) {
+            layer.as<FillLayer>()->setSourceLayer(layerId);
+        } else if (layer.is<LineLayer>()) {
+            layer.as<LineLayer>()->setSourceLayer(layerId);
+        } else if (layer.is<SymbolLayer>()) {
+            layer.as<SymbolLayer>()->setSourceLayer(layerId);
+        } else if (layer.is<CircleLayer>()) {
+            layer.as<CircleLayer>()->setSourceLayer(layerId);
+        } else {
+            mbgl::Log::Warning(mbgl::Event::JNI, "Layer doesn't support source layer");
+        }
+    }
+
     jni::Class<Layer> Layer::javaClass;
 
     void Layer::registerNative(jni::JNIEnv& env) {
@@ -123,7 +142,8 @@ namespace android {
             METHOD(&Layer::getId, "nativeGetId"),
             METHOD(&Layer::setLayoutProperty, "nativeSetLayoutProperty"),
             METHOD(&Layer::setPaintProperty, "nativeSetPaintProperty"),
-            METHOD(&Layer::setFilter, "nativeSetFilter")
+            METHOD(&Layer::setFilter, "nativeSetFilter"),
+            METHOD(&Layer::setSourceLayer, "nativeSetSourceLayer")
         );
 
     }

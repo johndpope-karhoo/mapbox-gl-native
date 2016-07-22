@@ -43,6 +43,8 @@ public abstract class Layer {
 
     protected native void nativeSetFilter(Object[] filter);
 
+    protected native void nativeSetSourceLayer(String sourceLayer);
+
     @Override
     public String toString() {
         return "Layer: " + getId();

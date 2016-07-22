@@ -6,7 +6,6 @@ import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,13 +15,17 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.style.Filter;
-import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.NoSuchLayerException;
+import com.mapbox.mapboxsdk.style.layers.Property;
+import com.mapbox.mapboxsdk.style.layers.RasterLayer;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.style.sources.RasterSource;
 import com.mapbox.mapboxsdk.style.sources.Source;
+import com.mapbox.mapboxsdk.style.sources.VectorSource;
 import com.mapbox.mapboxsdk.testapp.R;
 
 import java.io.BufferedReader;
@@ -31,7 +34,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import static com.mapbox.mapboxsdk.style.Filter.*;
@@ -128,8 +130,14 @@ public class RuntimeStyleActivity extends AppCompatActivity {
             case R.id.action_remove_layer:
                 removeBuildings();
                 return true;
-            case R.id.action_add_layer:
-                addLayer();
+            case R.id.action_add_parks_layer:
+                addParksLayer();
+                return true;
+            case R.id.action_add_terrain_layer:
+                addTerrainLayer();
+                return true;
+            case R.id.action_add_satellite_layer:
+                addSatelliteLayer();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -188,7 +196,7 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         }
     }
 
-    private void addLayer() {
+    private void addParksLayer() {
         //Add a source
         Source source;
         try {
@@ -200,7 +208,7 @@ public class RuntimeStyleActivity extends AppCompatActivity {
 
         mapboxMap.addSource(source);
 
-        FillLayer layer = new FillLayer("testLayer", "amsterdam-spots");
+        FillLayer layer = new FillLayer("parksLayer", "amsterdam-spots");
         layer.setPaintProperty(fillColor(Color.RED)); //You can set properties here
         layer.setPaintProperty(fillOutlineColor(Color.BLUE));
         layer.setPaintProperty(fillOpacity(0.3f));
@@ -214,10 +222,34 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         //layer.setPaintProperty(fillColor(Color.RED)); //XXX But not after the object is attached
 
         //Or get the object later and set it. It's all good.
-        mapboxMap.getLayer("testLayer").setPaintProperty(fillColor(Color.RED));
+        mapboxMap.getLayer("parksLayer").setPaintProperty(fillColor(Color.RED));
 
         //Get a good look at it all
         mapboxMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+    }
+
+    private void addTerrainLayer() {
+        //Add a source
+        Source source = new VectorSource("my-terrain-source", "mapbox://mapbox.mapbox-terrain-v2");
+        mapboxMap.addSource(source);
+
+        LineLayer layer = new LineLayer("terrainLayer", "my-terrain-source");
+        layer.setSourceLayer("contour");
+        layer.setLayoutProperty(lineJoin(Property.LINE_JOIN_ROUND));
+        layer.setLayoutProperty(lineCap(Property.LINE_CAP_ROUND));
+        layer.setPaintProperty(lineColor(Color.RED));
+        layer.setPaintProperty(lineWidth(20f));
+
+        mapboxMap.addLayer(layer);
+    }
+
+    private void addSatelliteLayer() {
+        //Add a source
+        Source source = new RasterSource("my-raster-source", "mapbox://mapbox.satellite");
+        mapboxMap.addSource(source);
+
+        //Add a layer
+        mapboxMap.addLayer(new RasterLayer("satellite-layer", "my-raster-source"));
     }
 
     private String readRawResource(@RawRes int rawResource) throws IOException {
